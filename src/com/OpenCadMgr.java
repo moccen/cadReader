@@ -1,9 +1,6 @@
 package com;
 
-import com.esri.arcgis.arcmapui.IMxDocument;
-import com.esri.arcgis.carto.FeatureLayer;
 import com.esri.arcgis.carto.IElement;
-import com.esri.arcgis.carto.IFeatureLayer;
 import com.esri.arcgis.carto.IGraphicsContainer;
 import com.esri.arcgis.carto.IMap;
 import com.esri.arcgis.carto.IMapDocument;
@@ -12,40 +9,22 @@ import com.esri.arcgis.carto.IMxdContents;
 import com.esri.arcgis.carto.Map;
 import com.esri.arcgis.carto.MapDocument;
 import com.esri.arcgis.carto.MarkerElement;
-import com.esri.arcgis.display.IFormattedTextSymbol;
-import com.esri.arcgis.display.ISymbol;
-import com.esri.arcgis.display.ISymbolCollection;
-import com.esri.arcgis.display.SymbolCollection;
-import com.esri.arcgis.display.TextSymbol;
-import com.esri.arcgis.geodatabase.IDataset;
 import com.esri.arcgis.geodatabase.IFeature;
 import com.esri.arcgis.geodatabase.IFeatureClass;
 import com.esri.arcgis.geodatabase.IFeatureCursor;
-import com.esri.arcgis.geodatabase.IFeatureDataset;
-import com.esri.arcgis.geodatabase.IFeatureWorkspaceAnno;
-import com.esri.arcgis.geodatabase.IWorkspace;
-import com.esri.arcgis.geodatabase.esriDatasetType;
 import com.esri.arcgis.geometry.IPoint;
-import com.esri.arcgis.geometry.ISpatialReference;
 import com.esri.arcgis.geometry.IZAware;
-import com.esri.arcgis.geometry.esriShapeType;
-import com.esri.arcgis.interop.AutomationException;
-import com.esri.arcgis.support.ms.stdole.Font;
-import com.esri.arcgis.support.ms.stdole.StdFont;
-
 import java.io.IOException;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.CADLayerCreator;
-import com.debuger.LogWriter;
 import com.esri.arcgis.system.EngineInitializer;
 
 public class OpenCadMgr {
 	CADLayerCreator _cadLyrCreator;
 	String nameOfCadFileString;
 
+	//根据dgn，dwg文件名称和路径，初始化CADLayerCreator对象，该对象用于获取CadResult对象
 	public OpenCadMgr() {
 		String nameOfPathString = "C:\\Users\\lee\\Documents\\code\\data";
 		nameOfCadFileString = "NNN+201301081618137++船闸上闸首检修叠梁门门体总图(115S66-03-Ⅲ-08.00).dgn";
@@ -94,7 +73,7 @@ public class OpenCadMgr {
 		}
 	}
 
-	// 返回开cad文件的结果类
+	// 返回开cad文件的结果类，CadResult包含cadMultitext对象集合和cadpolyline读取方法
 	private CadResult getOpenResult() {
 		try {
 			IFeatureClass pTxtFC = this._cadLyrCreator.getCadFC(FeatureType.multitext);
@@ -112,6 +91,7 @@ public class OpenCadMgr {
 
 	String outputStr = "";
 
+	//测试用，显示读取的cadMultitext字符串
 	public void showTxt() {
 		try {
 			CadResult cadRst = getOpenResult();
@@ -133,6 +113,7 @@ public class OpenCadMgr {
 		}
 	}
 
+	//测试方法
 	public void createMxd() throws Exception, IOException {
 		try {
 			// IFeatureClass pFC =
@@ -160,6 +141,7 @@ public class OpenCadMgr {
 
 	}
 
+	//测试方法
 	public void showVertexs() {
 		try {
 			CadResult cadRst = getOpenResult();
@@ -217,7 +199,7 @@ public class OpenCadMgr {
 		}
 	}
 
-	
+	//测试用，将读取的节点保存到Featureclass中
 	private void setVertexsFC(IFeatureClass pVertexsFC) {
 		try {
 			CadResult cadRst = getOpenResult();

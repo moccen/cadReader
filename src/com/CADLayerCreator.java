@@ -45,8 +45,8 @@ public class CADLayerCreator {
 
 	private String _nameOfPath;// cad文件所在的目录
 	private String _nameOfCADFile;// cad文件名称，带后缀名称
-	private String _fullPath;// path+filename
-	private IFeatureWorkspace _pFeatureWorkspace;
+//	private String _fullPath;// path+filename
+//	private IFeatureWorkspace _pFeatureWorkspace;
 
 	public CADLayerCreator(String nameOfPath, String nameOfCADFile) {
 		this._nameOfPath = nameOfPath;
@@ -69,7 +69,7 @@ public class CADLayerCreator {
 			// changeFont(pWorkspace);
 			// set the feature workspace
 			IFeatureWorkspace pFeatureWorkspace = new IFeatureWorkspaceProxy(pWorkspace);
-			this._pFeatureWorkspace = pFeatureWorkspace;
+			// this._pFeatureWorkspace = pFeatureWorkspace;
 			// open the feature class
 			IFeatureClass pFeatureClass = pFeatureWorkspace.openFeatureClass(openString);
 
@@ -81,23 +81,23 @@ public class CADLayerCreator {
 		}
 	}
 
-	// 尝试更改默认cad的字体为宋体
-	private void changeFont(IWorkspace pWS) throws Exception, IOException {
-		try {
-			IFeatureWorkspaceAnno pAnno = (IFeatureWorkspaceAnno) pWS;
-			ISymbolCollection pSymbolCollection = new SymbolCollection();
-			IFormattedTextSymbol pFormattedTextSymbol = new TextSymbol();
-			Font pFont = new StdFont();
-			pFont.setName("宋体");
-			pFormattedTextSymbol.setFont(pFont);
-			pSymbolCollection.setSymbolByRef(0, (ISymbol) pFormattedTextSymbol);
-			pAnno.replaceSymbolCollection("annoTest", pSymbolCollection);
-		} catch (Exception e) {
-			// TODO: handle exception
-			throw new Exception("changeFont failed!!!" + e.getMessage());
-		}
-
-	}
+	// 尝试更改默认cad的字体为宋体，来解决乱码问题
+	// private void changeFont(IWorkspace pWS) throws Exception, IOException {
+	// try {
+	// IFeatureWorkspaceAnno pAnno = (IFeatureWorkspaceAnno) pWS;
+	// ISymbolCollection pSymbolCollection = new SymbolCollection();
+	// IFormattedTextSymbol pFormattedTextSymbol = new TextSymbol();
+	// Font pFont = new StdFont();
+	// pFont.setName("宋体");
+	// pFormattedTextSymbol.setFont(pFont);
+	// pSymbolCollection.setSymbolByRef(0, (ISymbol) pFormattedTextSymbol);
+	// pAnno.replaceSymbolCollection("annoTest", pSymbolCollection);
+	// } catch (Exception e) {
+	// // TODO: handle exception
+	// throw new Exception("changeFont failed!!!" + e.getMessage());
+	// }
+	//
+	// }
 
 	// 调用getCadFC函数，将获取的FeatureClass文件包装成FeatureLayer
 	public IFeatureLayer getCadFL(FeatureType FT) throws Exception {

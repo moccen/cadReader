@@ -37,6 +37,7 @@ public class CadPolyline {
 		return vertexs;
 	}
 
+	//获取每一天polyline的所有节点
 	private void setVertexs() throws Exception {
 		// TODO Auto-generated method stub
 		try {

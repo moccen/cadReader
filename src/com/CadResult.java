@@ -22,15 +22,15 @@ import com.esri.arcgis.interop.AutomationException;
  */
 public class CadResult {
 
-	private List<CadMultiTxt> lyrMultiTxts;
-	private List<CadPolyline> lyrPolylines;
+	private List<CadMultiTxt> lyrMultiTxts;// 用于保存读取的cad注记点
+	// private List<CadPolyline> lyrPolylines;// 用于保存读取的cad线
 	private IFeatureClass multiTxtFC;
-	private IFeatureClass polylineFC;
-	private IFeatureCursor pCursor;
+	// private IFeatureClass polylineFC;
+	private IFeatureCursor pCursor;// 读取polyline IFeatureClass的游标
 
 	public CadResult(IFeatureClass multiTxtFC, IFeatureClass polylineFC) throws AutomationException, IOException {
 		this.multiTxtFC = multiTxtFC;
-		this.polylineFC = polylineFC;
+		// this.polylineFC = polylineFC;
 		if (polylineFC != null) {
 			this.pCursor = polylineFC.search(null, false);
 		}
@@ -50,7 +50,7 @@ public class CadResult {
 		return lyrMultiTxts;
 	}
 
-	//设置lyrMultiTxts
+	// 设置lyrMultiTxts
 	private void setMultiTxts() throws Exception {
 		try {
 			// TODO Auto-generated method stub
@@ -90,20 +90,7 @@ public class CadResult {
 		}
 	}
 
-	public List<CadPolyline> getLyrPolylines() {
-		try {
-			if (this.lyrPolylines == null) {
-				this.lyrPolylines = new ArrayList<CadPolyline>();
-				setPolylines();
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
-		return this.lyrPolylines;
-
-	}
-
+	// 用于读取下一个cadpolyline
 	public CadPolyline getNextPolyLine() throws Exception {
 		if (this.pCursor == null) {
 			throw new Exception("CadPolylineMgr -> pCursor为空！");
@@ -115,41 +102,62 @@ public class CadResult {
 		IGeometry pGeometry = pFeature.getShape();
 		if (pGeometry instanceof IPolyline) {
 			IPolyline polyline = (IPolyline) pGeometry;
-			//IPointCollection pointCollection = (IPointCollection)polyline;
+			// IPointCollection pointCollection = (IPointCollection)polyline;
 			CadPolyline pCadPolyline = new CadPolyline(polyline);
 			return pCadPolyline;
-		}
-		else {
+		} else {
 			return null;
 		}
 	}
+
+	// 占用内存过大，改用游标方式getNextPolyLine读取cadpolyline
+	// private List<CadPolyline> getLyrPolylines() {
+	// try {
+	// if (this.lyrPolylines == null) {
+	// this.lyrPolylines = new ArrayList<CadPolyline>();
+	// setPolylines();
+	// }
+	// } catch (Exception e) {
+	// // TODO: handle exception
+	// e.printStackTrace();
+	// }
+	// return this.lyrPolylines;
+	//
+	// }
 	
-	//设置lyrPolylines
-	private void setPolylines() {
-		// TODO Auto-generated method stub
-		try {
-			if (this.polylineFC == null) {
-				throw new Exception("CadResult -> setPolylines -> polylineFC要素类为空");
-			}
-			//System.out.println(this.polylineFC.featureCount(null));
-			IFeatureCursor pCursor = this.polylineFC.search(null, false);
-			IFeature pFeature = pCursor.nextFeature();
-			while (pFeature != null) {
-				IGeometry pGeometry = pFeature.getShapeCopy();
-				if (pGeometry instanceof IPolyline) {
-					IPolyline polyline = (IPolyline) pGeometry;
-					//IPointCollection ptCollection = (IPointCollection)polyline;
-					CadPolyline pCadPolyline = new CadPolyline(polyline);
-					this.lyrPolylines.add(pCadPolyline);
-					pFeature = pCursor.nextFeature();
-				}else {
-					pFeature = pCursor.nextFeature();;
-					System.out.println(String.format("%s->该要素不是线要素！->%s", pFeature.getOID(),pFeature.getFeatureType()));
-				}						
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
-	}
+	
+	
+
+	// 设置lyrPolylines
+	// private void setPolylines() {
+	// // TODO Auto-generated method stub
+	// try {
+	// if (this.polylineFC == null) {
+	// throw new Exception("CadResult -> setPolylines -> polylineFC要素类为空");
+	// }
+	// // System.out.println(this.polylineFC.featureCount(null));
+	// IFeatureCursor pCursor = this.polylineFC.search(null, false);
+	// IFeature pFeature = pCursor.nextFeature();
+	// while (pFeature != null) {
+	// IGeometry pGeometry = pFeature.getShapeCopy();
+	// if (pGeometry instanceof IPolyline) {
+	// IPolyline polyline = (IPolyline) pGeometry;
+	// // IPointCollection ptCollection =
+	// // (IPointCollection)polyline;
+	// CadPolyline pCadPolyline = new CadPolyline(polyline);
+	// this.lyrPolylines.add(pCadPolyline);
+	// pFeature = pCursor.nextFeature();
+	// } else {
+	// pFeature = pCursor.nextFeature();
+	// ;
+	// System.out
+	// .println(String.format("%s->该要素不是线要素！->%s", pFeature.getOID(),
+	// pFeature.getFeatureType()));
+	// }
+	// }
+	// } catch (Exception e) {
+	// // TODO: handle exception
+	// e.printStackTrace();
+	// }
+	// }
 }
